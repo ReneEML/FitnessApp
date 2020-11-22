@@ -2,7 +2,7 @@ import React from 'react';
 import{View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 import defaultProject from '../firebase/firebaseConfig';
 import FbApp from '../firebase/firebaseConfig';
-
+    
 const LoadingScreen = ({navigation}) =>{
     navigation.setOptions({
         headerLeft:null
