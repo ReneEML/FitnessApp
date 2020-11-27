@@ -8,9 +8,6 @@ import * as GoogleSignIn from 'expo-google-sign-in';
 import FbApp from '../firebase/firebaseConfig';
 
 const LoginScreen = ({navigation}) => {
-    navigation.setOptions({
-        headerLeft:null
-    });
     const [activeUser, setActiveUser] = useState(null)
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
