@@ -1,6 +1,8 @@
+import { Button } from 'native-base';
 import React from 'react';
-import {StyleSheet, Text, View, ScrollView, SafeAreaView, Image} from 'react-native';
+import {StyleSheet, Text, View, ScrollView, SafeAreaView, Image, TouchableOpacity} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+import { styles } from '../styles'
 
 const DATA = [
     {
@@ -74,16 +76,15 @@ const DATA = [
     group:"Chest"
 }
 ]
-
-
+const accStyle = styles
 const Excercise = ({image, name}) =>(
-    <View style={styles.icon}>
+    <View style={accStyle.icon}>
     <Image 
         source={{
             uri: image
         }} 
         style={{width: 80, height:80, borderRadius: 80 / 2}} />
-        <Text style ={styles.excerciseText}>{name}</Text>
+        <Text style ={accStyle.excerciseText}>{name}</Text>
 </View>
 );
 const renderExcercise = ({item}) => (
@@ -98,27 +99,19 @@ const lists = DATA.map(listInfo =>(
         renderItem = {renderExcercise}
         keyExtractor={item => item.id}
     />
-    </View>    
+    </View>
+     
 ));
-const Accessories = () => {
+const Accessories = ({navigation}) => {
     return(
         <SafeAreaView>
             {lists}
+            <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Home')}>
+                <Text>Finish program</Text>
+            </TouchableOpacity>
         </SafeAreaView>
         
     )
 }
 
-const styles = StyleSheet.create({
-    icon:{
-        width:100,
-        alignItems: 'center',
-    },
-    excerciseText:{
-        textAlign:"center"
-    },
-
-}
-    
-);
 export default Accessories;

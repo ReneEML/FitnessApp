@@ -8,7 +8,8 @@ import SignIn from './src/screens/Login';
 import Home from './src/screens/Home';
 import LoadingScreen from './src/screens/LoadingScreen';
 import * as firebase from 'firebase';
-import firebaseConfig from './src/firebase/firebaseConfig';
+import WorkoutStyle from './src/screens/WorkoutStyle';
+import Accessories from './src/screens/Accessories';
 
 const Stack = createStackNavigator();
 
@@ -28,12 +29,22 @@ export default function App() {
         headerLeft={null}
         options={{ title: '' }}
         />
-        <Stack.Screen
+      <Stack.Screen
         name="Home"
         component={Home}
         headerLeft={null}
         options={{ title: 'Welcome Home' }}
         />
+      <Stack.Screen 
+        name="WorkoutStyle"
+        component={WorkoutStyle}
+        options={{title: 'Program Style'}}
+        />
+        <Stack.Screen
+          name="Accessories"
+          component={Accessories}
+          options={{title: 'Select Excercises'}}
+          />
       </Stack.Navigator>
     </NavigationContainer>
     
