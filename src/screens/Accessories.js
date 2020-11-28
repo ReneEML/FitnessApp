@@ -106,7 +106,7 @@ const Accessories = ({navigation}) => {
     return(
         <SafeAreaView>
             {lists}
-            <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Home')}>
+            <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Workout')}>
                 <Text>Finish program</Text>
             </TouchableOpacity>
         </SafeAreaView>
