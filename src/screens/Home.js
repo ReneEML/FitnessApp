@@ -6,6 +6,9 @@ const Home = ({navigation}) =>{
     const onPress = () =>{
         navigation.navigate('WorkoutStyle');
     }
+    const startWorkout = () =>{
+        navigation.navigate('Workout');
+    }
     var user = FbApp.auth().currentUser;
     navigation.setOptions({
         headerLeft:null
@@ -14,6 +17,9 @@ const Home = ({navigation}) =>{
         <View>
             <TouchableOpacity style={styles.button} onPress={onPress}>
                 <Text>Create program</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={startWorkout}>
+                <Text>Start Workout</Text>
             </TouchableOpacity>
         </View>
         //<TouchableOpacity style={styles.button} onPress={navigation.navigate('WorkoutStyle')}/>
@@ -32,6 +38,18 @@ const styles = StyleSheet.create({
         paddingTop:20,
         paddingBottom:20,
         backgroundColor:'#68a0cf',
+        borderRadius:10,
+        borderWidth: 1,
+        borderColor: '#fff',
+        alignItems: 'center'
+      },
+      buttonGreen:{
+        marginRight:40,
+        marginLeft:40,
+        marginTop:10,
+        paddingTop:20,
+        paddingBottom:20,
+        backgroundColor:'#32CD32',
         borderRadius:10,
         borderWidth: 1,
         borderColor: '#fff',

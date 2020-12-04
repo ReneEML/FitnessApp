@@ -10,6 +10,8 @@ import LoadingScreen from './src/screens/LoadingScreen';
 import * as firebase from 'firebase';
 import WorkoutStyle from './src/screens/WorkoutStyle';
 import Accessories from './src/screens/Accessories';
+import Workout from './src/screens/Workout';
+import RecordExcercise from './src/screens/RecordExcercise'
 
 const Stack = createStackNavigator();
 
@@ -45,7 +47,18 @@ export default function App() {
           component={Accessories}
           options={{title: 'Select Excercises'}}
           />
+        <Stack.Screen
+          name="Workout"
+          component={Workout}
+          options={{title: 'Selected Workout'}}
+        />
+        <Stack.Screen
+          name="RecordExcercise"
+          component={RecordExcercise}
+          options={{title: 'Record Sets'}}
+          />
       </Stack.Navigator>
+
     </NavigationContainer>
     
   );
