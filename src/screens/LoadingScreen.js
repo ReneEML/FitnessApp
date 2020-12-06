@@ -28,7 +28,6 @@ const LoadingScreen = ({navigation}) =>{
         </View>
     );
 }
-export default LoadingScreen;
 const styles = StyleSheet.create({
     container:{
         flex: 1,
@@ -36,3 +35,5 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     }
 })
+export default LoadingScreen;
+
