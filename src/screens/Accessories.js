@@ -11,11 +11,8 @@ const Accessories = ({navigation}) => {
     const [chest, setChest] = useState([]);
 
     setData = () =>{
-        let s = getAccessory("shoulder");
-        let c = getAccessory("chest");
-        setShoulder(s);
-        setChest(c);
-        shoulder.forEach((s) =>console.log(s));
+        getAccessory("shoulder").then((result) => setShoulder(result));
+        getAccessory("chest").then((result) => setChest(result));
     }
     useEffect(() => {
 		setData();

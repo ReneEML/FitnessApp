@@ -1,17 +1,21 @@
 import React from 'react'
 import FbApp from './firebaseConfig'
 
-const  getAccessory = (excercise) =>{
+const getAccessory = (excercise) =>{
     let db = FbApp.firestore();
-    let excercises = [];
-    db.collection("Excercises").where("muscle", "==", excercise).where("type", "==", "accessory").get()
+    const excercises = [];
+    return db.collection("Excercises")
+    .where("muscle", "==", excercise)
+    .where("type", "==", "accessory")
+    .get()
     .then((querySnapshot) => {
         querySnapshot.forEach((doc)=>{
-            console.log(doc);
-            excercises.push(doc.name);
+            excercises.push(doc.data().name);
         });
+        console.log(excercises.length);
+        return excercises;
     });
-    return excercises;
+    
 }
 
 export {getAccessory}
