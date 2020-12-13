@@ -39,7 +39,7 @@ const Accessories = ({navigation}) => {
                     horizontal
                     data={shoulder}
                     renderItem = {renderExcercise}
-                    keyExtractor={(index) => index}
+                    keyExtractor={(index) => index + "_shoulder"}
                 />
             </View>
             <View>
@@ -48,7 +48,7 @@ const Accessories = ({navigation}) => {
                     horizontal
                     data={chest}
                     renderItem = {renderExcercise}
-                    keyExtractor={(index) => index}
+                    keyExtractor={(index) => index + "_shoulder"}
                 />
             </View> 
             <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Home')}>

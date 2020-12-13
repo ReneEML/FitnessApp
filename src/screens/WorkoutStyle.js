@@ -4,9 +4,7 @@ import {StyleSheet, Text, View, ScrollView, TouchableOpacity, SafeAreaView,Statu
 import { FlatList } from 'react-native-gesture-handler';
 
 const WorkoutStyle = ({navigation}) => {
-    const Home = () =>{
-        navigation.navigate('Home');
-    }
+
     const DATA = [
         {
             id: "health_style",

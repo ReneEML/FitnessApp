@@ -12,6 +12,7 @@ import WorkoutStyle from './src/screens/WorkoutStyle';
 import Accessories from './src/screens/Accessories';
 import Workout from './src/screens/Workout';
 import RecordExcercise from './src/screens/RecordExcercise'
+import ViewWorkout from './src/screens/ViewWorkout';
 
 const Stack = createStackNavigator();
 
@@ -56,6 +57,11 @@ export default function App() {
           name="RecordExcercise"
           component={RecordExcercise}
           options={{title: 'Record Sets'}}
+          />
+        <Stack.Screen
+          name="ViewWorkout"
+          component={ViewWorkout}
+          options={{title: "View Workout"}}
           />
       </Stack.Navigator>
 
