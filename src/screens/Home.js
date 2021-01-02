@@ -1,51 +1,58 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import{View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import FbApp from '../firebase/firebaseConfig'
+import FbApp from '../firebase/firebaseConfig';
 import Workout from './Workout';
-
-const DATA = [
-    {
-        date: "December 13 2020",
-        workout: "Leg Workout",
-        location: "zwqerewerqwe"
-    },
-    {
-        date: "December 15 2020",
-        workout: "Leg Workout",
-        location: "zfvgyuikliuhjgf"
-    },
-    {
-        date: "December 17 2020",
-        workout: "Leg Workout",
-        location: "tsdfgnjkkklpo"
-    },
-]
+import {getWorkouts} from '../firebase/firebaseService';
 
 const Home = ({navigation}) =>{
+    const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
+                    "Friday", "Saturday"];
+    const month = ["January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"];
+
+    const [workouts, setWorkouts] = useState([]);
+    const startDate = Date(2021, 1, 1).toString();
+    const setData = () =>{
+        getWorkouts().then((result) => setWorkouts(result));
+    }
     const onPress = () =>{
         navigation.navigate('WorkoutStyle');
     }
     const startWorkout = () =>{
         navigation.navigate('Workout');
     }
+    const getDate = (days) =>{
+        
+        
+        let result = new Date(startDate);
+        result.setDate(result.getDate() + days);
+        return weekday[result.getDay()] + ", "  + month[result.getMonth()] + " " + 
+        result.getDate() + ", " + result.getFullYear();
+    }
     var user = FbApp.auth().currentUser;
     navigation.setOptions({
         headerLeft:null
     });
-    const Item = ({workout, date}) =>(
-        <TouchableOpacity style={styles.buttonGreen} onPress={() => navigation.navigate("ViewWorkout")}>
+    const Item = ({workout, date, id}) =>(
+        <TouchableOpacity style={styles.buttonGreen} onPress={() => {
+            console.log(id);
+            navigation.navigate("ViewWorkout", {location: id, name: workout})
+            }}>
             <Text>
                 {workout} 
             </Text>
             <Text>
-                {date} 
+                {getDate(date)} 
             </Text>
         </TouchableOpacity>
     );
     const renderItem = ({item}) => (
-        <Item workout = {item.workout} date = {item.date} />
+        <Item workout = {item.name} date = {item.date} id  = {item.id}/>
     );
+    useEffect(() => {
+		setData();
+	  }, []);
     return(
         <View>
             <TouchableOpacity style={styles.button} onPress={onPress}>
@@ -57,9 +64,9 @@ const Home = ({navigation}) =>{
             <View style={styles.button}>
                 <Text>Upcoming</Text>
                 <FlatList
-                    data={DATA}
+                    data={workouts}
                     renderItem = {renderItem}
-                    keyExtractor={(item) => item.location}
+                    keyExtractor={(item) => item.id}
                 />
             </View>
         </View>
