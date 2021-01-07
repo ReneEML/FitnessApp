@@ -1,10 +1,12 @@
 import {Text, View, SafeAreaView, TouchableOpacity, Image} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {viewExercises} from '../firebase/firebaseService'
 import {workoutStyle} from '../styles'
+import GlobalContext from '../context/global'
 
 const ViewWorkout = ({navigation, route}) => {
+    const user = useContext(GlobalContext);
     const [exerciseList, setExerciseList] = useState([]);
     const maxes = {
         bench: 250,
@@ -18,13 +20,13 @@ const ViewWorkout = ({navigation, route}) => {
         }
         let weight;
         if(name == "Bench Press"){
-            weight = Math.ceil(percentOfMax * maxes.bench/5)* 5;
+            weight = Math.ceil(percentOfMax * user.maxes.bench/5)* 5;
         }
         else if(name == "Squat"){
-            weight = Math.ceil(percentOfMax * maxes.squat/5)* 5;
+            weight = Math.ceil(percentOfMax * user.maxes.squat/5)* 5;
         }
         else if(name == "Deadlift"){
-            weight = Math.ceil(percentOfMax * maxes.dead/5)* 5;
+            weight = Math.ceil(percentOfMax * user.maxes.dead/5)* 5;
         }
         else{
             return "";

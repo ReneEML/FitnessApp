@@ -37,7 +37,9 @@ const workoutStyle = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#fff',
         alignItems: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent:'center'
       },
       itemCol: {
         backgroundColor: "#f9c2ff",
@@ -63,7 +65,9 @@ const workoutStyle = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#fff',
         alignItems: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent:'center'
       },
       header: {
         fontSize: 32,

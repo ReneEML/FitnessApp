@@ -1,26 +1,36 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, SafeAreaView, FlatList, TouchableOpacity} from 'react-native';
+import {Text, View, SafeAreaView, FlatList, TouchableOpacity, Keyboard} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { set } from 'react-native-reanimated';
-import FbApp from '../firebase/firebaseConfig'
-import {workoutStyle} from '../styles'
-import {Input} from 'native-base'
+import FbApp from '../firebase/firebaseConfig';
+import {workoutStyle} from '../styles';
+import {Container, Content, Header, Form, Imput, Item, Button, Label, Input} from 'native-base';
 
 const RecordExcercise = ({navigation, route}) => {
     const {sets, swag} = route.params;
     const [setList, setSetList] = useState([]);
     const [inputs, setInputs] = useState([]);
     const [listIndex, setListIndex] = useState(0)
-    const Item = ({ item, index, style }) => (
+    const Item = ({ item, index, style, edit }) => (
 		<View style={style}>
-            <Text style={{marginLeft: 35, fontSize: 24, textAlign: "center"}}>Set {index + 1} Reps: </Text>
+            <Text >{index + 1}</Text>
             <TextInput
+                    style={{fontSize:24, marginLeft:35, minWidth: 24, backgroundColor: 'grey', textAlign:'center'}}
                     autoCorrect={false}
                     autoCapitalize="none"
                     onChangeText={text => inputs[index].reps = text}
+                    clearTextOnFocus = {true}
                     defaultValue={inputs[index].reps}
                     keyboardType="number-pad"
+                    returnKeyLabel='Done' 
+                    returnKeyType='done' 
+                    onSubmitEditing={Keyboard.dismiss}
+                    maxLength={2}
+                    editable={!edit}
+                    
+                    
                     />
+            <Text >reps</Text>
         </View>
       );
     const getSets = () =>{
@@ -58,7 +68,7 @@ const RecordExcercise = ({navigation, route}) => {
                 renderItem ={({item, index}) =>{
                     const logged = item.logged === true ? workoutStyle.itemLogged : workoutStyle.item
                     return(
-                        <Item item={item.reps} index={index} style ={logged}/>
+                        <Item item={item.reps} index={index} style ={logged} edit={item.logged}/>
                     );
                 }
                 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import{View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import FbApp from '../firebase/firebaseConfig';
@@ -12,20 +12,19 @@ const Home = ({navigation}) =>{
                     "July", "August", "September", "October", "November", "December"];
 
     const [workouts, setWorkouts] = useState([]);
-    const startDate = Date(2021, 1, 1).toString();
+    const startDate = "2021/01/25";
     const setData = () =>{
         getWorkouts().then((result) => setWorkouts(result));
     }
     const onPress = () =>{
-        navigation.navigate('WorkoutStyle');
+        navigation.navigate('UpdateMaxes');
     }
     const startWorkout = () =>{
         navigation.navigate('Workout');
     }
     const getDate = (days) =>{
-        
-        
         let result = new Date(startDate);
+        console.log(result.toDateString())
         result.setDate(result.getDate() + days);
         return weekday[result.getDay()] + ", "  + month[result.getMonth()] + " " + 
         result.getDate() + ", " + result.getFullYear();
@@ -52,7 +51,8 @@ const Home = ({navigation}) =>{
     );
     useEffect(() => {
 		setData();
-	  }, []);
+      }, []);
+    //const context = UseContext(GlobalContext);
     return(
         <View>
             <TouchableOpacity style={styles.button} onPress={onPress}>
@@ -70,7 +70,6 @@ const Home = ({navigation}) =>{
                 />
             </View>
         </View>
-        //<TouchableOpacity style={styles.button} onPress={navigation.navigate('WorkoutStyle')}/>
     );
 }
 export default Home;
