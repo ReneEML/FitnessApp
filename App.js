@@ -2,24 +2,18 @@ import 'react-native-gesture-handler';
 import { StyleSheet, Text, View } from 'react-native';
 import Navigation from './src/screens/Navigation';
 import React from 'react';
-import GlobalContext from './src/context/global'
+import {useState} from 'react-native';
+import {Provider} from 'react-redux';
+import configureStore from './src/store';
 
 export default function App() {
 
-  const user = {
-    name: "Rene",
-    maxes:{
-      bench: 255,
-      squat: 370,
-      dead: 405
-    }
-    
-  }
+  const store = configureStore();
 
   return (
-    <GlobalContext.Provider value={user}>
-      <Navigation/>
-    </GlobalContext.Provider>
+      <Provider store={store}>
+        <Navigation/>
+      </Provider>
     
   );
 }
