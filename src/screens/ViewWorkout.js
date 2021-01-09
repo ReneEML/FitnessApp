@@ -1,32 +1,28 @@
 import {Text, View, SafeAreaView, TouchableOpacity, Image} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import React, {useState, useEffect, useContext} from 'react';
-import {viewExercises} from '../firebase/firebaseService'
-import {workoutStyle} from '../styles'
-import GlobalContext from '../context/global'
+import React, {useState, useEffect} from 'react';
+import {viewExercises} from '../firebase/firebaseService';
+import {workoutStyle} from '../styles';
+import { connect } from 'react-redux';
 
-const ViewWorkout = ({navigation, route}) => {
-    const user = useContext(GlobalContext);
+
+
+const ViewWorkout = (props) => {
     const [exerciseList, setExerciseList] = useState([]);
-    const maxes = {
-        bench: 250,
-        squat: 345,
-        dead: 375
-    }
-    const {location, name} = route.params;
+    const {location, name} = props.route.params;
     const calculateWeight = (name, percentOfMax) =>{
         if(percentOfMax == null){
             return "";
         }
         let weight;
         if(name == "Bench Press"){
-            weight = Math.ceil(percentOfMax * user.maxes.bench/5)* 5;
+            weight = Math.ceil(percentOfMax * props.bench/5)* 5;
         }
         else if(name == "Squat"){
-            weight = Math.ceil(percentOfMax * user.maxes.squat/5)* 5;
+            weight = Math.ceil(percentOfMax * props.squat/5)* 5;
         }
         else if(name == "Deadlift"){
-            weight = Math.ceil(percentOfMax * user.maxes.dead/5)* 5;
+            weight = Math.ceil(percentOfMax * props.dead/5)* 5;
         }
         else{
             return "";
@@ -72,5 +68,13 @@ const ViewWorkout = ({navigation, route}) => {
     );
 }
 
+const mapStateToProps = (state) => {
+    return {
+        bench: state.maxesReducer.bench,
+        squat: state.maxesReducer.squat,
+        dead: state.maxesReducer.dead,
+    }
 
-export default ViewWorkout;
+}
+
+export default connect(mapStateToProps) (ViewWorkout);

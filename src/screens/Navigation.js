@@ -11,6 +11,7 @@ import RecordExcercise from './RecordExcercise'
 import ViewWorkout from './ViewWorkout';
 import React from 'react';
 import UpdateMaxes from './UpdateMaxes';
+import SelectProgram from './SelectProgram';
 
 const Navigation = () => {
     
@@ -66,6 +67,11 @@ const Navigation = () => {
           name="UpdateMaxes"
           component={UpdateMaxes}
           options={{title: "Update Your Maxes"}}
+          />
+          <Stack.Screen
+          name="SelectProgram"
+          component={SelectProgram}
+          options={{title: "Select your program!"}}
           />
         </Stack.Navigator>
       </NavigationContainer>

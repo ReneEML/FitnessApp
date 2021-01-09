@@ -6,9 +6,13 @@ import * as Facebook from 'expo-facebook';
 import * as Application from 'expo-application';
 import * as GoogleSignIn from 'expo-google-sign-in';
 import FbApp from '../firebase/firebaseConfig';
+import {addUser} from '../firebase/firebaseAdd';
+import {getUser, getActiveProgram} from '../firebase/firebaseService';
+import {connect} from 'react-redux';
+import { setActiveProgram } from '../actions/activeProgram'
 
 const LoginScreen = ({navigation}) => {
-    const [activeUser, setActiveUser] = useState(null)
+    const [activeUser, setActiveUser] = useState(null);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     
@@ -17,7 +21,24 @@ const LoginScreen = ({navigation}) => {
             if(password.length < 6){
                 return;
             }
-            FbApp.auth().createUserWithEmailAndPassword(email, password)
+            FbApp.auth().createUserWithEmailAndPassword(email, password).then(
+                () => {
+                    loggedIn = FbApp.auth().currentUser;
+                    data = {
+                            email: loggedIn.email,
+                            id: loggedIn.uid,
+                            name: null,
+                            maxes: {
+                                bench: null,
+                                squat: null,
+                                dead: null
+                            }
+                        }
+                    addUser(data);
+
+                    console.log(loggedIn.uid);
+                }
+            )
         }
         catch(error){
             console.log(error.toString())
@@ -26,8 +47,8 @@ const LoginScreen = ({navigation}) => {
 
     const signInUser = (email, password) => {
         try{
-            navigation.navigate('LoadingScreen');
-            FbApp.auth().signInWithEmailAndPassword(email,password).then((user) =>{console.log(user)})
+            FbApp.auth().signInWithEmailAndPassword(email,password)
+            .then(() => navigation.navigate('LoadingScreen'));
         }
         catch(error){
             console.log(error.toString())

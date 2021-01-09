@@ -21,19 +21,21 @@ const WorkoutStyle = ({navigation}) => {
             id: "powerlifting_style",
             title: "Powerlifting",
             route: "Accessories",
+            template: "nS2S2Gp9pePnDe3bbgd46XKApQl1"
         },
         {
             id: "custom_style",
             title: "Custom",
             route: "Home",
+          
         }
     ];
     const onPress = ({route}) =>{
         navigation.navigate(route);
     };
-    const Item = ({title, route}) => (
+    const Item = ({title, route, template}) => (
         <View>
-            <TouchableOpacity style={styles.item} onPress={() => navigation.navigate(route)}>
+            <TouchableOpacity style={styles.item} onPress={() => navigation.navigate(route, {tempID: template})}>
                 <Text style={styles.title}>{title}</Text>
             </TouchableOpacity>
         </View>
@@ -41,7 +43,7 @@ const WorkoutStyle = ({navigation}) => {
     );
 
     const renderItem = ({ item }) => (
-        <Item title={item.title}  route={item.route}/>
+        <Item title={item.title}  route={item.route} template={item.template}/>
       );
     
       return (

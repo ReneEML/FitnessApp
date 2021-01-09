@@ -1,21 +1,37 @@
 import React from 'react';
-import{View, Text, StyleSheet, ActivityIndicator} from 'react-native';
-import defaultProject from '../firebase/firebaseConfig';
+import{View, StyleSheet, ActivityIndicator} from 'react-native';
+import { connect } from 'react-redux';
 import FbApp from '../firebase/firebaseConfig';
-    
-const LoadingScreen = ({navigation}) =>{
-    navigation.setOptions({
+import {getUser, getActiveProgram} from '../firebase/firebaseService';
+import {setUser} from '../actions/user';
+import {setActiveProgram} from '../actions/activeProgram';
+import {setSquat, setBench, setDead} from '../actions/maxes';
+
+const LoadingScreen = (props) =>{
+    props.navigation.setOptions({
         headerLeft:null
     });
+    const initState = (id) => {
+        getUser(id).then((result) => {
+            props.setUser(result);
+            props.setBench(result.maxes.bench);
+            props.setSquat(result.maxes.squat);
+            props.setDead(result.maxes.dead);
+            getActiveProgram(result.id).then((result) => {
+                props.setActiveProgram(result);
+                props.navigation.navigate("Home")
+            })
+        });
+    }
     const checkifLoggedIn = () =>{
         FbApp.auth().onAuthStateChanged(function(user){
             if(user)
             {
-                navigation.navigate('Home');
+                initState(FbApp.auth().currentUser.uid);
             }
             else
             {
-                navigation.navigate('LoginScreen');
+                props.navigation.navigate('SignIn');
             }
         })
     }
@@ -35,5 +51,30 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     }
 })
-export default LoadingScreen;
+
+const mapStateToProps = (state) => {
+    return {
+        email: state.userReducer.email,
+        userID: state.userReducer.id,
+        name: state.userReducer.name,
+        programID: state.activeProgramReducer.id,
+        start: state.activeProgramReducer.start,
+        template : state.activeProgramReducer.template,
+    }
+
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        setUser: (user) => {
+            dispatch(setUser(user));
+        },
+        setActiveProgram: (program) => dispatch(setActiveProgram(program)),
+        setBench: (user) => dispatch(setBench(user)),
+        setSquat: (user) => dispatch(setSquat(user)),
+        setDead: (user) => dispatch(setDead(user))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (LoadingScreen);
 

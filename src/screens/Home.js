@@ -1,42 +1,50 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import{View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import FbApp from '../firebase/firebaseConfig';
 import Workout from './Workout';
-import {getWorkouts} from '../firebase/firebaseService';
+import {getWorkouts, getActiveProgram} from '../firebase/firebaseService';
+import {connect} from 'react-redux';
+import { setActiveProgram } from '../actions/activeProgram';
 
-const Home = ({navigation}) =>{
+const Home = (props) =>{
+    const [template, setTemplate] = useState("");
     const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
                     "Friday", "Saturday"];
     const month = ["January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"];
 
     const [workouts, setWorkouts] = useState([]);
-    const startDate = "2021/01/25";
     const setData = () =>{
-        getWorkouts().then((result) => setWorkouts(result));
+
+            getWorkouts(props.template).then((result) => {
+                setWorkouts(result);
+                console.log(result);
+            })
+            .catch((error) =>console.log(error));
+        
     }
     const onPress = () =>{
-        navigation.navigate('UpdateMaxes');
+        props.navigation.navigate('UpdateMaxes');
     }
     const startWorkout = () =>{
-        navigation.navigate('Workout');
+        props.navigation.navigate('Workout');
     }
     const getDate = (days) =>{
-        let result = new Date(startDate);
+        let result = new Date(props.start);
         console.log(result.toDateString())
         result.setDate(result.getDate() + days);
         return weekday[result.getDay()] + ", "  + month[result.getMonth()] + " " + 
         result.getDate() + ", " + result.getFullYear();
     }
-    var user = FbApp.auth().currentUser;
-    navigation.setOptions({
+    //var user = FbApp.auth().currentUser;
+    props.navigation.setOptions({
         headerLeft:null
     });
     const Item = ({workout, date, id}) =>(
         <TouchableOpacity style={styles.buttonGreen} onPress={() => {
             console.log(id);
-            navigation.navigate("ViewWorkout", {location: id, name: workout})
+            props.navigation.navigate("ViewWorkout", {location: id, name: workout})
             }}>
             <Text>
                 {workout} 
@@ -52,7 +60,6 @@ const Home = ({navigation}) =>{
     useEffect(() => {
 		setData();
       }, []);
-    //const context = UseContext(GlobalContext);
     return(
         <View>
             <TouchableOpacity style={styles.button} onPress={onPress}>
@@ -60,6 +67,9 @@ const Home = ({navigation}) =>{
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={startWorkout}>
                 <Text>Start Workout</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('SignIn')}>
+                <Text>Test Log In</Text>
             </TouchableOpacity>
             <View style={styles.button}>
                 <Text>Upcoming</Text>
@@ -69,10 +79,41 @@ const Home = ({navigation}) =>{
                     keyExtractor={(item) => item.id}
                 />
             </View>
+            <View style={styles.button}>
+                <Text>
+                    Active Program
+                </Text>
+                <Text>
+                    Start: {props.start} Template: {props.template} ID: {props.programID}
+                </Text>
+            </View>
+            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("SelectProgram")}>
+                <Text>Select Program</Text>
+            </TouchableOpacity>
         </View>
     );
 }
-export default Home;
+
+const mapStateToProps = (state) => {
+    return {
+        email: state.userReducer.email,
+        userID: state.userReducer.id,
+        name: state.userReducer.name,
+        programID: state.activeProgramReducer.id,
+        start: state.activeProgramReducer.start,
+        template : state.activeProgramReducer.template,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        setActiveProgram: (program) => dispatch(setActiveProgram(program))
+    }
+}
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps) (Home);
 const styles = StyleSheet.create({
     container:{
         flex: 1,

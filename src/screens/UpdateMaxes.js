@@ -1,20 +1,20 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View, Text, SafeAreaView, Keyboard} from 'react-native';
 import {Container, Content, Header, Form, Imput, Item, Button, Label, Input} from 'native-base';
-import GlobalContext from '../context/global';
+import { updateUser } from '../firebase/firebaseAdd';
 
-
-
+//To Do: add redux state to this component
 const UpdateMaxes = ({navigation}) => {
-    const user = useContext(GlobalContext);
     
     const [maxes, setMaxes] = useState({bench: null, squat: null, dead: null});
 
     const updateMax = () => {
         if(maxes.bench != null && maxes.dead != null && maxes.squat != null){
-            user.maxes.bench = maxes.bench;
-            user.maxes.squat = maxes.squat;
-            user.maxes.dead = maxes.dead;
+
+            /*GLOBAL.user.maxes.bench = maxes.bench;
+            GLOBAL.user.maxes.squat = maxes.squat;
+            GLOBAL.user.maxes.dead = maxes.dead;*/
+            //updateUser(GLOBAL.user.id, GLOBAL.user);
             navigation.navigate('WorkoutStyle');
         }
         else{
