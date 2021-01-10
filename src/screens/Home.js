@@ -106,9 +106,6 @@ const Home = (props) =>{
             <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("SelectProgram")}>
                 <Text>Select Program</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("ProgramInfo")}>
-                <Text>DatePicker</Text>
-            </TouchableOpacity>
         </View>
     );
 }
