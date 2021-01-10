@@ -14,11 +14,29 @@ const LoadingScreen = (props) =>{
     const initState = (id) => {
         getUser(id).then((result) => {
             props.setUser(result);
-            props.setBench(result.maxes.bench);
-            props.setSquat(result.maxes.squat);
-            props.setDead(result.maxes.dead);
+            if(result.maxes.bench != null){
+                props.setBench(result.maxes.bench);
+            }
+            if(result.maxes.squat != null){
+                props.setSquat(result.maxes.squat);
+            }
+            if(result.maxes.dead != null){
+                props.setDead(result.maxes.dead);
+            }
             getActiveProgram(result.id).then((result) => {
-                props.setActiveProgram(result);
+                if(result != null){
+                    console.log(result);
+                    props.setActiveProgram(result);
+                }
+                else{
+                    const prog = {
+                        start: "",
+                        template:"none",
+                        programID: "",
+
+                    }
+                    props.setActiveProgram(prog);
+                }
                 props.navigation.navigate("Home")
             })
         });

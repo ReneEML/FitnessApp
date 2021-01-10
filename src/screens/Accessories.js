@@ -5,11 +5,13 @@ import { FlatList } from 'react-native-gesture-handler';
 import { styles } from '../styles'
 import {getAccessory} from '../firebase/firebaseService'
 import {addProgram} from '../firebase/firebaseAdd';
+import {connect} from 'react-redux';
+import { setActiveProgram } from '../actions/activeProgram';
 
 
 
-const Accessories = ({navigation, route}) => {
-    const {tempId} = route.params;
+const Accessories = (props) => {
+    const {date, programName, tempID} = props.route.params;
     const [shoulder, setShoulder] = useState([]);
     const [chest, setChest] = useState([]);
 
@@ -36,16 +38,22 @@ const Accessories = ({navigation, route}) => {
     );
 
     const finishProgram = () => {
+        let progStatus = "deactivated"
+        if(props.programID == "" || props.programID == null){
+            progStatus = "active"
+        }
         const program = {
-            start: "2021/01/25",
-            status: "deactivated",
-            //change user to redux state
-            user: "bruh",
-            template: "jd2X8gfR8y6xo3lxxf1n",
-            name: "Test Program",
+            start: date,
+            status: progStatus,
+            user: props.userID,
+            template: tempID,
+            name: programName,
+        }
+        if(progStatus == "active"){
+            props.setActiveProgram(program);
         }
         addProgram(program);
-        navigation.navigate("Home");
+        props.navigation.navigate("Home");
     }
     return(
         <SafeAreaView>
@@ -75,4 +83,24 @@ const Accessories = ({navigation, route}) => {
     )
 }
 
-export default Accessories;
+const mapStateToProps = (state) => {
+    return {
+        email: state.userReducer.email,
+        userID: state.userReducer.id,
+        name: state.userReducer.name,
+        programID: state.activeProgramReducer.id,
+        start: state.activeProgramReducer.start,
+        template : state.activeProgramReducer.template,
+        squat: state.maxesReducer.bench,
+        bench: state.maxesReducer.bench,
+        dead: state.maxesReducer.dead
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        setActiveProgram: (program) => dispatch(setActiveProgram(program))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (Accessories);

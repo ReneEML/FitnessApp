@@ -1,24 +1,31 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, SafeAreaView, Keyboard} from 'react-native';
-import {Container, Content, Header, Form, Imput, Item, Button, Label, Input} from 'native-base';
+import {StyleSheet, View, Text, SafeAreaView, Keyboard, Alert} from 'react-native';
+import {Container, Form,  Item, Button, Label, Input} from 'native-base';
 import { updateUser } from '../firebase/firebaseAdd';
+import {setBench,setSquat, setDead} from '../actions/maxes';
+import { connect } from 'react-redux';
 
 //To Do: add redux state to this component
-const UpdateMaxes = ({navigation}) => {
+const UpdateMaxes = (props) => {
     
     const [maxes, setMaxes] = useState({bench: null, squat: null, dead: null});
-
     const updateMax = () => {
         if(maxes.bench != null && maxes.dead != null && maxes.squat != null){
-
-            /*GLOBAL.user.maxes.bench = maxes.bench;
-            GLOBAL.user.maxes.squat = maxes.squat;
-            GLOBAL.user.maxes.dead = maxes.dead;*/
-            //updateUser(GLOBAL.user.id, GLOBAL.user);
-            navigation.navigate('WorkoutStyle');
+            props.setSquat(maxes.setSquat);
+            props.setBench(maxes.bench);
+            props.setDead(maxes.dead);
+            const update = {
+                maxes:{
+                    squat: maxes.squat,
+                    bench: maxes.bench,
+                    dead: maxes.dead
+                }
+            }
+            updateUser(props.userID, update);
+            props.navigation.navigate('WorkoutStyle');
         }
         else{
-            console.log("Please enter a value for all!");
+            Alert.alert("Please enter a value for all three lifts.")
         }
     }
     return(
@@ -84,4 +91,21 @@ const styles = StyleSheet.create({
     },
 });
 
-export default UpdateMaxes;
+const mapStateToProps = (state) => {
+    return {
+        userID: state.userReducer.id,
+        squat: state.maxesReducer.bench,
+        bench: state.maxesReducer.bench,
+        dead: state.maxesReducer.dead
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        setBench: (weight) => dispatch(setBench(weight)),
+        setSquat: (weight) => dispatch(setSquat(weight)),
+        setDead: (weight) => dispatch(setDead(weight))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (UpdateMaxes); 

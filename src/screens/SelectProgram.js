@@ -23,7 +23,9 @@ const SelectProgram = (props) => {
     );
     const activate = (id, template, start) => {
         if(id != props.programID){
-            updateStatus(props.programID, {status: "deactivated"});
+            if(props.programID != "none" || props.programID != null || props.programID != ""){
+                updateStatus(props.programID, {status: "deactivated"});
+            }
             updateStatus(id, {status: "active"});
             let active = {
                 id: id,

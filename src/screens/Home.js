@@ -8,7 +8,6 @@ import {connect} from 'react-redux';
 import { setActiveProgram } from '../actions/activeProgram';
 
 const Home = (props) =>{
-    const [template, setTemplate] = useState("");
     const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
                     "Friday", "Saturday"];
     const month = ["January", "February", "March", "April", "May", "June",
@@ -16,28 +15,31 @@ const Home = (props) =>{
 
     const [workouts, setWorkouts] = useState([]);
     const setData = () =>{
-
-            getWorkouts(props.template).then((result) => {
-                setWorkouts(result);
-                console.log(result);
-            })
-            .catch((error) =>console.log(error));
-        
+            console.log("gets Here");
+            if(props.template != "" || props.template != null || props.template != "none"){
+                getWorkouts(props.template).then((result) => {
+                    setWorkouts(result);
+                    console.log(result);
+                })
+            }
     }
     const onPress = () =>{
-        props.navigation.navigate('UpdateMaxes');
+        if(props.bench == "" && props.dead == "" && props.squat == ""){
+            props.navigation.navigate('UpdateMaxes');
+        }
+        else{
+            props.navigation.navigate('WorkoutStyle');
+        }
     }
     const startWorkout = () =>{
         props.navigation.navigate('Workout');
     }
     const getDate = (days) =>{
         let result = new Date(props.start);
-        console.log(result.toDateString())
         result.setDate(result.getDate() + days);
         return weekday[result.getDay()] + ", "  + month[result.getMonth()] + " " + 
         result.getDate() + ", " + result.getFullYear();
     }
-    //var user = FbApp.auth().currentUser;
     props.navigation.setOptions({
         headerLeft:null
     });
@@ -57,9 +59,37 @@ const Home = (props) =>{
     const renderItem = ({item}) => (
         <Item workout = {item.name} date = {item.date} id  = {item.id}/>
     );
-    useEffect(() => {
-		setData();
-      }, []);
+    useEffect(() => setData(), [props.template]);
+    const UpcomingList = () => {
+        if(props.temlate != "none"){
+            return(            
+            <View style={styles.button}>
+                <Text>Upcoming</Text>
+                <FlatList
+                    data={workouts}
+                    renderItem = {renderItem}
+                    keyExtractor={(item) => item.id}
+                />
+            </View>
+            );
+        }
+        return null;
+    }
+    const ActiveProgram = () => {
+        if(props.template != "none"){
+            return(
+            <View style={styles.button}>
+                <Text>
+                    Active Program
+                </Text>
+                <Text>
+                    Start: {props.start} Template: {props.template} ID: {props.programID}
+                </Text>
+            </View>
+            );
+        }
+        return null;
+    }
     return(
         <View>
             <TouchableOpacity style={styles.button} onPress={onPress}>
@@ -71,24 +101,13 @@ const Home = (props) =>{
             <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate('SignIn')}>
                 <Text>Test Log In</Text>
             </TouchableOpacity>
-            <View style={styles.button}>
-                <Text>Upcoming</Text>
-                <FlatList
-                    data={workouts}
-                    renderItem = {renderItem}
-                    keyExtractor={(item) => item.id}
-                />
-            </View>
-            <View style={styles.button}>
-                <Text>
-                    Active Program
-                </Text>
-                <Text>
-                    Start: {props.start} Template: {props.template} ID: {props.programID}
-                </Text>
-            </View>
+            <UpcomingList/>
+            <ActiveProgram/>
             <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("SelectProgram")}>
                 <Text>Select Program</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate("ProgramInfo")}>
+                <Text>DatePicker</Text>
             </TouchableOpacity>
         </View>
     );
@@ -102,6 +121,9 @@ const mapStateToProps = (state) => {
         programID: state.activeProgramReducer.id,
         start: state.activeProgramReducer.start,
         template : state.activeProgramReducer.template,
+        squat: state.maxesReducer.bench,
+        bench: state.maxesReducer.bench,
+        dead: state.maxesReducer.dead
     }
 }
 

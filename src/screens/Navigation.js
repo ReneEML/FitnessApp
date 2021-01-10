@@ -12,6 +12,7 @@ import ViewWorkout from './ViewWorkout';
 import React from 'react';
 import UpdateMaxes from './UpdateMaxes';
 import SelectProgram from './SelectProgram';
+import ProgramInfo from './ProgramInfo';
 
 const Navigation = () => {
     
@@ -73,7 +74,13 @@ const Navigation = () => {
           component={SelectProgram}
           options={{title: "Select your program!"}}
           />
+          <Stack.Screen
+          name="ProgramInfo"
+          component={ProgramInfo}
+          options={{title: "Set program information"}}
+          />
         </Stack.Navigator>
+        
       </NavigationContainer>
     )
 }

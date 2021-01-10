@@ -1,5 +1,6 @@
 import React from 'react'
 import FbApp from './firebaseConfig'
+import * as firebase  from 'firebase';
 
 const getAccessory = (excercise) =>{
     const db = FbApp.firestore();
@@ -108,7 +109,7 @@ const getActiveProgram = async (id) => {
         querySnapshot.forEach((doc) => {
             activeProgram = {
                 id: doc.id,
-                start: doc.data().start,
+                start: (new Date(doc.data().start.seconds * 1000)).toDateString(),
                 template: doc.data().template,
             }
             console.log(activeProgram);
@@ -127,7 +128,7 @@ const getPrograms = (user) => {
             let program = {
                 name: doc.data().name,
                 id: doc.id,
-                start:doc.data().start,
+                start: (new Date(doc.data().start.seconds * 1000)).toDateString(),
                 template: doc.data().template
             };
             //console.log(program);

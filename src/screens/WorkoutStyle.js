@@ -20,8 +20,8 @@ const WorkoutStyle = ({navigation}) => {
         {
             id: "powerlifting_style",
             title: "Powerlifting",
-            route: "Accessories",
-            template: "nS2S2Gp9pePnDe3bbgd46XKApQl1"
+            route: "ProgramInfo",
+            template: "jd2X8gfR8y6xo3lxxf1n",
         },
         {
             id: "custom_style",
@@ -30,9 +30,6 @@ const WorkoutStyle = ({navigation}) => {
           
         }
     ];
-    const onPress = ({route}) =>{
-        navigation.navigate(route);
-    };
     const Item = ({title, route, template}) => (
         <View>
             <TouchableOpacity style={styles.item} onPress={() => navigation.navigate(route, {tempID: template})}>
